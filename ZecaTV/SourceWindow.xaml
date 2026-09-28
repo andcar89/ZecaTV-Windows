@@ -1,0 +1,72 @@
+<Window x:Class="ZecaTV.SourceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:ZecaTV.Localization"
+        Title="{x:Static loc:Strings.PlaylistDialogTitle}"
+        Width="600" SizeToContent="Height"
+        ResizeMode="NoResize" ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BackgroundBrush}"
+        Foreground="{StaticResource TextBrush}"
+        FontFamily="Segoe UI">
+
+    <StackPanel Margin="28,22,28,24">
+        <TextBlock Text="{x:Static loc:Strings.PlaylistDialogHeading}" FontSize="18" FontWeight="SemiBold" />
+
+        <TextBlock Text="{x:Static loc:Strings.PlaylistNameLabel}" Style="{StaticResource FieldLabel}" />
+        <TextBox x:Name="NameBox" />
+
+        <StackPanel Orientation="Horizontal" Margin="0,16,0,4">
+            <RadioButton x:Name="M3uUrlRadio" Content="{x:Static loc:Strings.M3uUrlOption}" GroupName="SourceType" Checked="SourceType_Checked" />
+            <RadioButton x:Name="M3uFileRadio" Content="{x:Static loc:Strings.M3uFileOption}" GroupName="SourceType" Checked="SourceType_Checked" />
+            <RadioButton x:Name="XtreamRadio" Content="{x:Static loc:Strings.XtreamOption}" GroupName="SourceType" Checked="SourceType_Checked" />
+        </StackPanel>
+
+        <!-- M3U URL -->
+        <StackPanel x:Name="M3uUrlFields">
+            <TextBlock Text="{x:Static loc:Strings.PlaylistUrlLabel}" Style="{StaticResource FieldLabel}" />
+            <TextBox x:Name="M3uUrlBox" />
+            <TextBlock Text="{x:Static loc:Strings.EpgUrlLabel}"
+                       Style="{StaticResource FieldLabel}" />
+            <TextBox x:Name="M3uUrlEpgBox" />
+        </StackPanel>
+
+        <!-- M3U file -->
+        <StackPanel x:Name="M3uFileFields" Visibility="Collapsed">
+            <TextBlock Text="{x:Static loc:Strings.PlaylistFileLabel}" Style="{StaticResource FieldLabel}" />
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Content="{x:Static loc:Strings.BrowseButton}" Margin="8,0,0,0" Click="BrowseButton_Click" />
+                <TextBox x:Name="M3uFilePathBox" IsReadOnly="True" />
+            </DockPanel>
+            <TextBlock Text="{x:Static loc:Strings.EpgUrlLabel}"
+                       Style="{StaticResource FieldLabel}" />
+            <TextBox x:Name="M3uFileEpgBox" />
+        </StackPanel>
+
+        <!-- Xtream Codes -->
+        <StackPanel x:Name="XtreamFields" Visibility="Collapsed">
+            <TextBlock Text="{x:Static loc:Strings.ServerLabel}" Style="{StaticResource FieldLabel}" />
+            <TextBox x:Name="XtreamServerBox" />
+            <TextBlock Text="{x:Static loc:Strings.UsernameLabel}" Style="{StaticResource FieldLabel}" />
+            <TextBox x:Name="XtreamUserBox" />
+            <TextBlock Text="{x:Static loc:Strings.PasswordLabel}" Style="{StaticResource FieldLabel}" />
+            <DockPanel>
+                <Button x:Name="TogglePasswordButton" DockPanel.Dock="Right" Content="{x:Static loc:Strings.ShowButton}" Width="72"
+                        Margin="8,0,0,0" Click="TogglePasswordButton_Click" />
+                <Grid>
+                    <PasswordBox x:Name="XtreamPassBox" />
+                    <TextBox x:Name="XtreamPassVisibleBox" Visibility="Collapsed" />
+                </Grid>
+            </DockPanel>
+        </StackPanel>
+
+        <TextBlock x:Name="MessageText" Margin="0,18,0,0" FontSize="13" TextWrapping="Wrap"
+                   Visibility="Collapsed" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,22,0,0">
+            <Button x:Name="CancelButton" Content="{x:Static loc:Strings.CancelButton}" IsCancel="True" Margin="0,0,10,0" />
+            <Button x:Name="SaveButton" Content="{x:Static loc:Strings.SaveAndLoadButton}" IsDefault="True"
+                    Style="{StaticResource AccentButton}" Click="SaveButton_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>

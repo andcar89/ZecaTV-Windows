@@ -1,0 +1,19 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider / JetBrains
+.idea/
+
+# installer/publish.ps1 and build-installer.ps1 output (see README § Installer & portable build)
+publish/
+installer/Output/
+
+# OS cruft
+Thumbs.db
+.DS_Store

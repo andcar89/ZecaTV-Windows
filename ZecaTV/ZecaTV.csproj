@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <!-- WPF has no tray-icon control of its own; System.Windows.Forms.NotifyIcon is the standard,
+         no-extra-NuGet way to get one (see UI/TrayIcon.cs) — this doesn't pull in any WinForms UI. -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <!-- Explicit usings in every file instead: WPF projects quietly drop some of the implicit
+         ones (System.IO, System.Net.Http), which makes "works here, breaks there" easy. -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>ZecaTV</RootNamespace>
+    <AssemblyName>ZecaTV</AssemblyName>
+    <Product>ZecaTV</Product>
+    <Version>0.1.0</Version>
+    <!-- Placeholder artwork (a plain accent-blue "Z" badge, matching the system-tray icon) until
+         ZecaTV has real branding — used for the .exe itself, taskbar, and Start Menu/desktop shortcuts. -->
+    <ApplicationIcon>Assets\ZecaTV.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- LibVLCSharp.WPF brings in LibVLCSharp itself; VideoLAN.LibVLC.Windows ships the native
+         libvlc DLLs + plugins (copied to bin\...\libvlc\win-x64 and win-x86 on build). -->
+    <PackageReference Include="LibVLCSharp.WPF" Version="3.9.4" />
+    <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.21" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Zé's own standalone playlist-editing tool (Settings → M3U Editor opens it in the default
+         browser) — a plain, self-contained HTML file, so it just needs to sit next to the .exe. -->
+    <Content Include="Assets\M3uEditor.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

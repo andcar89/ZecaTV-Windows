@@ -1,0 +1,75 @@
+<Window x:Class="ZecaTV.EpgGuideWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:ZecaTV.Localization"
+        Title="{x:Static loc:Strings.TvGuideTitle}"
+        Width="1150" Height="720" MinWidth="700" MinHeight="420"
+        Background="{StaticResource BackgroundBrush}"
+        Foreground="{StaticResource TextBrush}"
+        FontFamily="Segoe UI"
+        PreviewKeyDown="Window_PreviewKeyDown">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <Border Background="{StaticResource PanelBrush}" Padding="16,10">
+            <DockPanel LastChildFill="True">
+                <TextBlock DockPanel.Dock="Left" Text="{x:Static loc:Strings.TvGuideTitle}" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button x:Name="RefreshButton" Content="{x:Static loc:Strings.ReloadGuideButton}" Margin="10,0,0,0" Click="RefreshButton_Click" />
+                    <Button x:Name="NowButton" Content="{x:Static loc:Strings.NowButton}" Margin="10,0,0,0" Click="NowButton_Click" />
+                    <Button x:Name="PrevButton" Content="{x:Static loc:Strings.EarlierButton}" Margin="10,0,0,0" Click="PrevButton_Click"
+                            ToolTip="{x:Static loc:Strings.EarlierButtonTooltip}" />
+                    <Button x:Name="NextButton" Content="{x:Static loc:Strings.LaterButton}" Margin="6,0,0,0" Click="NextButton_Click"
+                            ToolTip="{x:Static loc:Strings.LaterButtonTooltip}" />
+                </StackPanel>
+                <ComboBox x:Name="CategoryCombo" Width="220" Margin="24,0,0,0" HorizontalAlignment="Left"
+                          DisplayMemberPath="Label" SelectionChanged="CategoryCombo_SelectionChanged" />
+            </DockPanel>
+        </Border>
+
+        <TextBlock x:Name="WindowLabel" Grid.Row="1" Margin="16,10,16,6" FontSize="13"
+                   Foreground="{StaticResource SubTextBrush}" />
+
+        <!-- Grid: fixed channel column (own vertical scroll, slaved to BodyScroll) + a fixed header
+             row (own horizontal scroll, slaved to BodyScroll) + the scrollable programme area. -->
+        <Grid Grid.Row="2" Margin="16,0,16,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="34" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Grid.Column="0" Background="{StaticResource PanelBrush}" CornerRadius="6,0,0,0" />
+
+            <Border Grid.Row="0" Grid.Column="1" Background="{StaticResource PanelBrush}" ClipToBounds="True" CornerRadius="0,6,0,0">
+                <ScrollViewer x:Name="HeaderScroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled"
+                              IsHitTestVisible="False">
+                    <StackPanel x:Name="HeaderTicks" Orientation="Horizontal" />
+                </ScrollViewer>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource PanelAltBrush}" CornerRadius="0,0,0,6" ClipToBounds="True">
+                <ScrollViewer x:Name="ChannelScroll" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
+                              IsHitTestVisible="False">
+                    <StackPanel x:Name="ChannelColumn" />
+                </ScrollViewer>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="1" Background="#0D000000" CornerRadius="0,0,6,0" ClipToBounds="True">
+                <ScrollViewer x:Name="BodyScroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                              ScrollChanged="BodyScroll_ScrollChanged">
+                    <StackPanel x:Name="BodyRows" />
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
