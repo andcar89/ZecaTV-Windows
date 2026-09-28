@@ -2,6 +2,10 @@
 
 WPF + LibVLCSharp port of the ZecaTV Android TV IPTV player.
 
+> **Note:** This app was built with AI assistance (Claude, by Anthropic) — every feature, fix, and
+> line in this repo was written by Claude, prompted and directed by a human. It's a personal
+> project, provided as-is with no warranty; use it at your own discretion.
+
 ## Build & run
 
 1. Open `ZecaTV.sln` in Visual Studio 2022 (".NET desktop development" workload, .NET 8 SDK).
