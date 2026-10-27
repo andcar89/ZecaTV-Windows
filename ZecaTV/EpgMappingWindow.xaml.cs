@@ -31,6 +31,7 @@ namespace ZecaTV
         public EpgMappingWindow(Channel? preselect = null)
         {
             InitializeComponent();
+            WindowFitting.ShrinkToWorkArea(this);
             _preselect = preselect;
         }
 

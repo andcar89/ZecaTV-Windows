@@ -45,6 +45,22 @@ namespace ZecaTV.Data
         /// <summary>If true, ZecaTV starts playing LastChannelKey (in preview, not fullscreen) as soon as the playlist loads.</summary>
         public bool ResumeLastChannelOnStartup { get; set; } = false;
 
+        /// <summary>The main window's normal (non-maximized) position and size when ZecaTV was last closed,
+        /// in WPF device-independent units; null until the first close. Applied via UI.WindowBounds.Fit,
+        /// which re-fits it to the screens as they are now. Written by MainWindow.Window_Closing.</summary>
+        public double? WindowLeft { get; set; }
+        public double? WindowTop { get; set; }
+        public double? WindowWidth { get; set; }
+        public double? WindowHeight { get; set; }
+
+        /// <summary>Whether the window was maximized when closed (or, if closed while fullscreen, whether it
+        /// was maximized before going fullscreen).</summary>
+        public bool WindowMaximized { get; set; }
+
+        /// <summary>Whether ZecaTV was closed while playing fullscreen. Fullscreen needs something playing,
+        /// so it's only brought back on startup when "resume last channel" is on and starts a channel.</summary>
+        public bool WindowFullscreen { get; set; }
+
         /// <summary>UI language. Changing it takes effect immediately in any window opened afterward;
         /// already-open windows (including the main one) need a restart to fully re-render.</summary>
         public AppLanguage Language { get; set; } = AppLanguage.English;

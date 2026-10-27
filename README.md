@@ -242,6 +242,16 @@ playing, since that's when LibVLC learns what's in the stream. Subtitles always 
 option at the top. If a stream carries just one audio track and no subtitles, the corresponding
 submenu simply says there's nothing to pick from.
 
+## Window size & display scaling
+
+ZecaTV reopens the way you closed it: the same position and size, maximized or not, and fullscreen
+too — fullscreen needs a channel playing, so it comes back only when **Resume the last channel** is on
+(otherwise it reopens in the normal view, maximized if it was). On a small or high-scaling screen
+(a 1080p laptop at 150% is only 1280×720 in Windows' units) the window is always fitted to the visible
+area — it opens maximized the first time if its default size wouldn't fit — and Settings, the TV Guide
+and the other windows never grow bigger than the screen. A position saved on a monitor that's since been
+unplugged is ignored rather than leaving the window off-screen.
+
 ## Minimize to tray
 
 On by default (**Settings → Window**): minimizing ZecaTV sends it to the system tray, near the

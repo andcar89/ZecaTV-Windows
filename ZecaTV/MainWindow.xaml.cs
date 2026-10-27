@@ -78,6 +78,11 @@ namespace ZecaTV
         private bool _suppressPlaylistSwitcherChange;
 
         private bool _isFullscreen;
+        /// <summary>The window state before it was last minimized (to the tray) — what to remember as
+        /// "how it was closed" if ZecaTV is exited from the tray while minimized.</summary>
+        private WindowState _lastVisibleWindowState = WindowState.Normal;
+        /// <summary>Last session ended fullscreen — re-entered once "resume last channel" has a channel playing.</summary>
+        private bool _reenterFullscreenOnStartup;
         private WindowState _restoreWindowState;
         private WindowStyle _restoreWindowStyle;
         private ResizeMode _restoreResizeMode;
@@ -127,6 +132,7 @@ namespace ZecaTV
         public MainWindow()
         {
             InitializeComponent();
+            RestoreWindowPlacement();
 
             _infoBarTimer = NewOneShotTimer(TimeSpan.FromSeconds(4), () => InfoBar.Visibility = Visibility.Collapsed);
             _osdTimer = NewOneShotTimer(TimeSpan.FromSeconds(1.5), () => OsdBadge.Visibility = Visibility.Collapsed);
@@ -165,11 +171,65 @@ namespace ZecaTV
             Loaded += MainWindow_Loaded;
         }
 
+        /// <summary>Opens the window where and how it was closed last time (size, position, maximized),
+        /// fitted to the screens as they are now — see <see cref="WindowBounds.Fit"/>. Runs from the
+        /// constructor, before the window is first shown.</summary>
+        private void RestoreWindowPlacement()
+        {
+            var settings = SettingsStore.Current;
+            BoundsD? saved = settings is { WindowLeft: { } l, WindowTop: { } t, WindowWidth: { } w, WindowHeight: { } h }
+                ? new BoundsD(l, t, w, h)
+                : null;
+
+            var fit = WindowBounds.Fit(
+                saved,
+                settings.WindowMaximized,
+                new BoundsD(SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop,
+                    SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight),
+                new BoundsD(SystemParameters.WorkArea.Left, SystemParameters.WorkArea.Top,
+                    SystemParameters.WorkArea.Width, SystemParameters.WorkArea.Height),
+                Width, Height, MinWidth, MinHeight);
+
+            WindowStartupLocation = WindowStartupLocation.Manual;
+            Left = fit.Bounds.Left;
+            Top = fit.Bounds.Top;
+            Width = fit.Bounds.Width;
+            Height = fit.Bounds.Height;
+            if (fit.Maximized) WindowState = WindowState.Maximized;
+
+            _lastVisibleWindowState = WindowState;
+            _reenterFullscreenOnStartup = settings.WindowFullscreen;
+        }
+
+        /// <summary>Remembers how the window is being closed: its normal bounds, whether it was maximized,
+        /// and whether it was fullscreen. While fullscreen the window is borderless-maximized, so the
+        /// maximized flag comes from the state it had before going fullscreen instead.</summary>
+        private void SaveWindowPlacement()
+        {
+            var settings = SettingsStore.Current;
+            var state = _isFullscreen ? _restoreWindowState
+                : WindowState == WindowState.Minimized ? _lastVisibleWindowState
+                : WindowState;
+
+            // RestoreBounds is the normal (un-maximized) rectangle whatever the current state.
+            var bounds = RestoreBounds;
+            if (!bounds.IsEmpty && bounds.Width > 0 && bounds.Height > 0)
+            {
+                settings.WindowLeft = bounds.Left;
+                settings.WindowTop = bounds.Top;
+                settings.WindowWidth = bounds.Width;
+                settings.WindowHeight = bounds.Height;
+            }
+            settings.WindowMaximized = state == WindowState.Maximized;
+            settings.WindowFullscreen = _isFullscreen;
+        }
+
         /// <summary>Minimizing sends the window to the tray instead of the taskbar, when enabled in
         /// Settings — restoring is the tray icon itself (click, double-click, or its "Open ZecaTV").
         /// Maximizing/restoring to Normal otherwise behaves exactly as a normal window.</summary>
         private void MainWindow_StateChanged(object? sender, EventArgs e)
         {
+            if (WindowState != WindowState.Minimized) _lastVisibleWindowState = WindowState;
             if (WindowState != WindowState.Minimized || !SettingsStore.Current.MinimizeToTray) return;
             ShowInTaskbar = false;
             Hide();
@@ -270,6 +330,7 @@ namespace ZecaTV
             _backgroundRefreshTimer?.Stop();
             _trayIcon.Dispose();
             SettingsStore.Current.Volume = _player.Volume;
+            SaveWindowPlacement();
             SettingsStore.Save();
         }
 
@@ -426,7 +487,10 @@ namespace ZecaTV
             {
                 PlayItem(lastItem, _visibleItems.Contains(lastItem) ? _visibleItems : BuildItems(PlaylistRepository.CategoryAll),
                     _visibleItems.Contains(lastItem) ? _currentCategoryId : PlaylistRepository.CategoryAll);
+                // Closed while fullscreen: go back to fullscreen now that a channel is playing.
+                if (_reenterFullscreenOnStartup) EnterFullscreen();
             }
+            _reenterFullscreenOnStartup = false;
             _isFirstLoad = false;
         }
 

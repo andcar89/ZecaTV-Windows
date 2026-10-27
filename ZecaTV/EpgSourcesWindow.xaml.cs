@@ -37,6 +37,7 @@ namespace ZecaTV
         public EpgSourcesWindow()
         {
             InitializeComponent();
+            WindowFitting.ShrinkToWorkArea(this);
             Refresh();
         }
 

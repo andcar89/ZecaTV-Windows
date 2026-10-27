@@ -42,6 +42,7 @@ namespace ZecaTV
         public SettingsWindow()
         {
             InitializeComponent();
+            WindowFitting.ShrinkToWorkArea(this);
             PopulateRefreshIntervalCombo();
             Refresh();
         }

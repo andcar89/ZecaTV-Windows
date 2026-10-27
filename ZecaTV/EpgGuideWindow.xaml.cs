@@ -42,6 +42,7 @@ namespace ZecaTV
         public EpgGuideWindow()
         {
             InitializeComponent();
+            WindowFitting.ShrinkToWorkArea(this);
             ResetWindowToNow();
             LoadCategories();
             Loaded += (_, _) => BuildGrid();

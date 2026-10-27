@@ -10,6 +10,7 @@ namespace ZecaTV
         public ControlsWindow()
         {
             InitializeComponent();
+            WindowFitting.ShrinkToWorkArea(this);
         }
 
         protected override void OnSourceInitialized(EventArgs e)

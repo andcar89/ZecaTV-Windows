@@ -33,6 +33,7 @@ namespace ZecaTV
         public SourceWindow(string? existingName, PlaylistSource? existingSource)
         {
             InitializeComponent();
+            WindowFitting.ShrinkToWorkArea(this);
             NameBox.Text = existingName ?? "";
             Prefill(existingSource);
             Closing += OnClosing;
