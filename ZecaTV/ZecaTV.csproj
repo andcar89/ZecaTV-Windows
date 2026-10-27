@@ -15,7 +15,7 @@
     <RootNamespace>ZecaTV</RootNamespace>
     <AssemblyName>ZecaTV</AssemblyName>
     <Product>ZecaTV</Product>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <!-- Placeholder artwork (a plain accent-blue "Z" badge, matching the system-tray icon) until
          ZecaTV has real branding — used for the .exe itself, taskbar, and Start Menu/desktop shortcuts. -->
     <ApplicationIcon>Assets\ZecaTV.ico</ApplicationIcon>

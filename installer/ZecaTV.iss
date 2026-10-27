@@ -8,7 +8,7 @@
 ; so the publish step always has to happen first (both scripts above do that for you).
 
 #define MyAppName "ZecaTV"
-#define MyAppVersion "0.1.0"
+#define MyAppVersion "0.1.1"
 #define MyAppPublisher "Ze"
 #define MyAppExeName "ZecaTV.exe"
 #define MyPublishDir "..\publish\win-x64"
